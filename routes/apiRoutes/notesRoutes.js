@@ -50,7 +50,6 @@ router.post('/notes', (req, res) => {
     //todo: unique id 
     const newNote = req.body
     let oldNote = {};
-
     try {
       let counter = 0;
       notes.forEach(element => {
@@ -59,20 +58,40 @@ router.post('/notes', (req, res) => {
         counter++;
         
       });
-        
         const data = notes //fs.readFileSync('../../db/db.json')
-        
         notes = updateNote(notes);
         res.json(notes);
+      } catch (err) {
+        console.error(err)
+      }    
+  });
+
+
+  router.delete('/notes', (req, res) => {
+    // set id based on what the next index of the array will be
+    
+    //todo: unique id 
+    const newNote = req.body
+    let oldNote = {};
+
+    try {
+      // let counter = 0;
+      // notes.forEach(element => {
+      //   if(newNote.id === element.id)
+      //     notes[counter]=newNote
+      //   counter++;
+        
+      // });
+      notes = notes.filter(aNote => aNote.id !== req.body.id)
+      notes = updateNote(notes);
+      res.json(notes);
 
 
       } catch (err) {
         console.error(err)
       }
-
-
     
-  });
+   });
   
   module.exports = router;
 

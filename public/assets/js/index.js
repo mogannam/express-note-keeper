@@ -61,16 +61,16 @@ const saveNote = (note) =>
   });
 
 const deleteNote = (id) =>
-  fetch(`/api/notes/${id}`, {
+  fetch(`/api/notes`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
     },
+    body: JSON.stringify({"id":id}),
   });
 
 const renderActiveNote = () => {
   hide(saveNoteBtn);
-  console.log(`in assers/js/index.jsrenderActiveNote() \n \t ${activeNote} \n \t ${activeNote.id}`)
 
   if (activeNote.id) {
     //noteTitle.setAttribute('readonly', true);
@@ -105,6 +105,7 @@ const handleNoteDelete = (e) => {
 
   const note = e.target;
   const noteId = JSON.parse(note.parentElement.getAttribute('data-note')).id;
+  
 
   if (activeNote.id === noteId) {
     activeNote = {};
