@@ -3,6 +3,10 @@ let noteText;
 let saveNoteBtn;
 let newNoteBtn;
 let noteList;
+let noteSeelcted;
+
+
+
 
 if (window.location.pathname === '/notes') {
   noteTitle = document.querySelector('.note-title');
@@ -10,6 +14,7 @@ if (window.location.pathname === '/notes') {
   saveNoteBtn = document.querySelector('.save-note');
   newNoteBtn = document.querySelector('.new-note');
   noteList = document.querySelectorAll('.list-container .list-group');
+  noteSelected = document.querySelector('.list-group-item')
 }
 
 // Show an element
@@ -25,16 +30,29 @@ const hide = (elem) => {
 // activeNote is used to keep track of the note in the textarea
 let activeNote = {};
 
-const getNotes = () =>
+const getNotes = () => {
+
   fetch('/api/notes', {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
     },
+  }).then(response => {
+    if (!response.ok) {
+      return alert('Error: ' + response.statusText);
+    }
+   
+    
+    return response.json();
+  })
+  .then(notesData => {
+    
+    renderNoteList(notesData);
   });
+}
 
 const saveNote = (note) =>
-  fetch('/api/notes', {
+  fetch(`/api/saveNote`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -52,10 +70,11 @@ const deleteNote = (id) =>
 
 const renderActiveNote = () => {
   hide(saveNoteBtn);
+  console.log(`in assers/js/index.jsrenderActiveNote() \n \t ${activeNote} \n \t ${activeNote.id}`)
 
   if (activeNote.id) {
-    noteTitle.setAttribute('readonly', true);
-    noteText.setAttribute('readonly', true);
+    //noteTitle.setAttribute('readonly', true);
+    //noteText.setAttribute('readonly', true);
     noteTitle.value = activeNote.title;
     noteText.value = activeNote.text;
   } else {
@@ -70,9 +89,11 @@ const handleNoteSave = () => {
   const newNote = {
     title: noteTitle.value,
     text: noteText.value,
+    id: activeNote.id
   };
   saveNote(newNote).then(() => {
     getAndRenderNotes();
+    activeNote = {}
     renderActiveNote();
   });
 };
@@ -100,6 +121,8 @@ const handleNoteView = (e) => {
   e.preventDefault();
   activeNote = JSON.parse(e.target.parentElement.getAttribute('data-note'));
   renderActiveNote();
+  show(saveNoteBtn);
+  //hide(newNoteBtn);
 };
 
 // Sets the activeNote to and empty object and allows the user to enter a new note
@@ -107,7 +130,7 @@ const handleNewNoteView = (e) => {
   e.preventDefault();
   const title = noteTitle.value;
   const text = noteText.value;
-  console.log(`title ${title} text ${text}`)
+  
   const id = -1
   const noteObject = { title, text, id};
 
@@ -126,12 +149,17 @@ const handleNewNoteView = (e) => {
       alert('Error: ' + response.statusText);
     })
     .then(postResponse => {
-      console.log(postResponse);
+      
       alert('Thank you for adding a note!');
+      getAndRenderNotes();
+      activeNote = {};
+      renderActiveNote();
+      
     });
 
-  activeNote = {};
-  renderActiveNote();
+    
+
+  
 };
 
 const handleRenderSaveBtn = () => {
@@ -144,7 +172,9 @@ const handleRenderSaveBtn = () => {
 
 // Render the list of note titles
 const renderNoteList = async (notes) => {
-  let jsonNotes = await notes.json();
+  
+  //let jsonNotes = await notes.json();
+  let jsonNotes = await notes;
   if (window.location.pathname === '/notes') {
     noteList.forEach((el) => (el.innerHTML = ''));
   }
@@ -196,14 +226,32 @@ const renderNoteList = async (notes) => {
   }
 };
 
+// const handleSelectNote = (e) => {
+//   show(saveNoteBtn);
+// }
+
 // Gets notes from the db and renders them to the sidebar
-const getAndRenderNotes = () => getNotes().then(renderNoteList);
+const getAndRenderNotes = async() => {
+  try {
+    
+    //getNotes().then(renderNoteList);
+    getNotes()
+   
+  }
+  catch (err){
+    
+    alert("An error occured")
+  }
+}
+getAndRenderNotes();
 
 if (window.location.pathname === '/notes') {
   saveNoteBtn.addEventListener('click', handleNoteSave);
   newNoteBtn.addEventListener('click', handleNewNoteView);
   noteTitle.addEventListener('keyup', handleRenderSaveBtn);
   noteText.addEventListener('keyup', handleRenderSaveBtn);
+  // if(noteSelected && noteList.length > 1)
+  //   noteSelected.addEventListener('click',handleSelectNote);
 }
 
-getAndRenderNotes();
+
