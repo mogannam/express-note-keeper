@@ -12,8 +12,7 @@
   * [Installation](#installation)
   * [Usage](#usage)
   * [Credits](#credits)
-  * [Questions](#questions)
-  * [Test Results](#test)
+  * [Links](#links)
   * [Contributing](#contributing)
   * [License](#license) 
 # Installation 
@@ -21,15 +20,21 @@
 # Usage 
  node server.js 
  # Credits 
- * Heroku * Node.js * Express * UUID  
-# Questions 
- If you have questions please reach out to use at  . 
- <ul><li><a href="https://github.com/mogannam/mogannam.git">Code on GitHub</a> </li>
-  <li><a href="https://mogannam.github.io/mogannam/">Demo of Deployed Project</a></li>
-  <li>Clone the projecct here: git@github.com:mogannam/mogannam.git </li></ul> 
- 
+ * Heroku 
+ * Node.js 
+ * Express 
+ * UUID  
 
-# Test 
+# Links
+ <ul><li><a href="https://github.com/mogannam/express-note-keeper.git">Code on GitHub</a> </li>
+  <li><a href="https://infinite-falls-91127.herokuapp.com/notes">Demo of Deployed Project</a></li>
+  <li>Clone the projecct here: git@github.com:mogannam/express-note-keeper.git </li></ul> 
+
+<img src="notekeeper-mockup01.png" >
+<img src="notekeeper-mockup02.png" >
+<img src="notekeeper-mockup03.png" >
+<img src="notekeeper-mockup04.png" >
+ 
   
 # Contributing 
  express-note-keeper has adopted the [Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg) code of conduct, for contributions. 
