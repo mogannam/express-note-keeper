@@ -31,7 +31,6 @@
   <li>Clone the projecct here: git@github.com:mogannam/express-note-keeper.git </li></ul> 
 
 <img src="notekeeper-mockup01.png" >
-<img src="notekeeper-mockup02.png" >
 <img src="notekeeper-mockup03.png" >
 <img src="notekeeper-mockup04.png" >
  
