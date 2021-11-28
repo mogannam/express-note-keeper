@@ -96,6 +96,7 @@ const handleNoteSave = () => {
     activeNote = {}
     renderActiveNote();
   });
+  show(newNoteBtn)
 };
 
 // Delete the clicked note
@@ -109,12 +110,15 @@ const handleNoteDelete = (e) => {
 
   if (activeNote.id === noteId) {
     activeNote = {};
+    show(newNoteBtn)
   }
+  
 
   deleteNote(noteId).then(() => {
     getAndRenderNotes();
     renderActiveNote();
   });
+
 };
 
 // Sets the activeNote and displays it
@@ -123,7 +127,7 @@ const handleNoteView = (e) => {
   activeNote = JSON.parse(e.target.parentElement.getAttribute('data-note'));
   renderActiveNote();
   show(saveNoteBtn);
-  //hide(newNoteBtn);
+  hide(newNoteBtn);
 };
 
 // Sets the activeNote to and empty object and allows the user to enter a new note
@@ -134,29 +138,37 @@ const handleNewNoteView = (e) => {
   
   const id = -1
   const noteObject = { title, text, id};
-
-  fetch('api/notes', {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(noteObject)
-  })
-    .then(response => {
-      if (response.ok) {
-        return response.json();
-      }
-      alert('Error: ' + response.statusText);
+  if(title != '')
+    fetch('api/notes', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(noteObject)
     })
-    .then(postResponse => {
-      
-      alert('Thank you for adding a note!');
-      getAndRenderNotes();
-      activeNote = {};
-      renderActiveNote();
-      
-    });
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        }
+        alert('Error: ' + response.statusText);
+      })
+      .then(postResponse => {
+        
+        alert('Thank you for adding a note!');
+        getAndRenderNotes();
+        activeNote = {};
+        renderActiveNote();
+
+        
+      });
+  else  
+      {
+        alert('The note is empty. Please enter a title at least.');
+        getAndRenderNotes();
+        activeNote = {};
+        renderActiveNote();
+      }
 
     
 
@@ -164,11 +176,21 @@ const handleNewNoteView = (e) => {
 };
 
 const handleRenderSaveBtn = () => {
-  if (!noteTitle.value.trim() || !noteText.value.trim()) {
-    hide(saveNoteBtn);
-  } else {
-    show(saveNoteBtn);
+  // if (!noteTitle.value.trim() || !noteText.value.trim()) {
+  //   hide(saveNoteBtn);
+  // } 
+  // else {
+  //   show(saveNoteBtn);
+  // }
+  if(newNoteBtn.display === 'none' || newNoteBtn.display === ''){
+    hide(saveNoteBtn)
+    show(newNoteBtn)
   }
+  else{
+    show(saveNoteBtn)
+    hide(newNoteBtn)
+  }
+    
 };
 
 // Render the list of note titles
@@ -249,10 +271,9 @@ getAndRenderNotes();
 if (window.location.pathname === '/notes') {
   saveNoteBtn.addEventListener('click', handleNoteSave);
   newNoteBtn.addEventListener('click', handleNewNoteView);
-  noteTitle.addEventListener('keyup', handleRenderSaveBtn);
-  noteText.addEventListener('keyup', handleRenderSaveBtn);
-  // if(noteSelected && noteList.length > 1)
-  //   noteSelected.addEventListener('click',handleSelectNote);
+  //noteTitle.addEventListener('keyup', handleRenderSaveBtn);
+  //noteText.addEventListener('keyup', handleRenderSaveBtn);
+
 }
 
 
